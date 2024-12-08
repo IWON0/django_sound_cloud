@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Google Sign-In</title>
+    <!-- Ваш Client ID из Google Cloud Console -->
+    <meta name="google-signin-client_id"
+    content="675947327797-086oknehlj3qqnp9i0ip9q4kp5v5duc7.apps.googleusercontent.com">
+</head>
+<body>
+    <h1>Login with Google</h1>
+    <div id="google-signin-button"></div>
+
+    <script>
+        // Функция обработки успешного входа
+        function handleCredentialResponse(response) {
+            const data = jwt_decode(response.credential); // Декодируем JWT токен
+            console.log('User Name: ' + data.name);
+            console.log('User Email: ' + data.email);
+            console.log('Token: ' + response.credential);
+
+            // Отправляем токен на сервер для дальнейшей проверки
+            fetch('http://localhost:8000/api/v1/auth/google/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                },
+                body: JSON.stringify({
+                    email: data.email, // Используем email из JWT
+                    token: response.credential // Отправляем сам токен
+                })
+            })
+            .then(response => response.json())
+            .then(data => console.log('ID: ' + data.user_id + '\nToken: ' + data.access_token))
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Инициализация кнопки входа с помощью Google Identity Services API
+        window.onload = function () {
+            google.accounts.id.initialize({
+                client_id: '675947327797-086oknehlj3qqnp9i0ip9q4kp5v5duc7.apps.googleusercontent.com',
+                callback: handleCredentialResponse // Указание функции для обработки успешного входа
+            });
+            google.accounts.id.renderButton(
+                document.getElementById("google-signin-button"), {
+                    theme: "outline",
+                    size: "large"
+                }
+            );
+            google.accounts.id.prompt(); // Подсказка для входа
+        };
+    </script>
+
+    <!-- Библиотека для декодирования JWT -->
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+
+    <!-- Библиотека для интеграции с Google Identity Services API -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</body>
+</html>
