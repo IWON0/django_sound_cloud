@@ -14,7 +14,7 @@ SECRET_KEY = 'django-insecure-^=rf9v!b9)6adajdg@n5i6%9674sxdah0kq!esz3+j8l!fc%ll
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -32,9 +32,12 @@ INSTALLED_APPS = [
 
     'src.oauth',
 
+    'corsheaders',
+
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -61,6 +64,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
@@ -119,3 +123,19 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+ALGORITHM = 'HS256'
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
+
+
+GOOGLE_CLIENT_ID = '675947327797-086oknehlj3qqnp9i0ip9q4kp5v5duc7.apps.googleusercontent.com'
+GOOGLE_CLIENT_SECRET = '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'
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:8000",  # для localhost с IP
+    "http://localhost:8000",  # для localhost с именем хоста
+]
+
+CORS_ALLOW_CREDENTIALS = True
