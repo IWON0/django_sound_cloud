@@ -5,7 +5,8 @@ from ...base.permissions import IsAuthor
 
 
 class UserView(viewsets.ModelViewSet):
-    """Viewing and editing user data"""
+    """ Просмотр и редактирование данных пользователя
+    """
     parser_classes = (parsers.MultiPartParser,)
     serializer_class = serializer.UserSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -33,3 +34,4 @@ class SocialLinkView(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+

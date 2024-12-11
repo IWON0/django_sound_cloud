@@ -6,13 +6,17 @@ urlpatterns = [
     path('me/', views.UserView.as_view({'get': 'retrieve', 'put': 'update'})),
 
     path('author/', views.AuthorView.as_view({'get': 'list'})),
+
     path('author/<int:pk>', views.AuthorView.as_view({'get': 'retrieve'})),
+
 
     path('social/', views.SocialLinkView.as_view({'get': 'list', 'post': 'create'})),
     path('social/<int:pk>/', views.SocialLinkView.as_view({'put': 'update', 'delete': 'destroy'})),
 
-    path('', auth_views.google_login),
+
     path('google/', auth_views.google_auth),
+    path('spotify-callback/', auth_views.spotify_auth),
+
     path('spotify-login/', auth_views.spotify_login),
-    path('spotify-callback/', auth_views.spotify_auth)
+    path('', auth_views.google_login)
 ]

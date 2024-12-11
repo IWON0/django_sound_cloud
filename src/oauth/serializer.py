@@ -26,6 +26,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 
 class GoogleAuth(serializers.Serializer):
-    """Сериализация данных от Google"""
+    """ Сериализация данных от Google
+    """
     email = serializers.EmailField()
     token = serializers.CharField()
