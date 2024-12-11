@@ -19,15 +19,13 @@ class UserView(viewsets.ModelViewSet):
 
 
 class AuthorView(viewsets.ReadOnlyModelViewSet):
-    """ Список авторов
-    """
+    """list of authors"""
     queryset = models.AuthUser.objects.all().prefetch_related('social_links')
     serializer_class = serializer.AuthorSerializer
 
 
 class SocialLinkView(viewsets.ModelViewSet):
-    """ CRUD ссылок соц. сетей пользователя
-    """
+    """CRUD of user social network links"""
     serializer_class = serializer.SocialLinkSerializer
     permission_classes = [IsAuthor]
 
@@ -36,12 +34,4 @@ class SocialLinkView(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
-
-
-
-
-
-
-
 
