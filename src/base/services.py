@@ -24,7 +24,7 @@ def get_path_upload_track(instance, file):
 
 
 def get_path_upload_cover_track(instance, file):
-    """ Построение пути к файлу, format: (media)/track/cover/user_id/photo.jpg"""
+    """ Path to file, format: (media)/track/cover/user_id/photo.jpg"""
     return f'track/cover/user_{instance.user.id}/{file}'
 
 

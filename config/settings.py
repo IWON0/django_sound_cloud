@@ -1,4 +1,4 @@
-import os.path
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -9,16 +9,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^=rf9v!b9)6adajdg@n5i6%9674sxdah0kq!esz3+j8l!fc%ll'
+SECRET_KEY = os.environ.get("SECRET_KEY", 'django-insecure-^=rf9v!b9)6adajdg@n5i6%9674sxdah0kq!esz3+j8l!fc%ll')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(int(os.environ.get("DEGUB", False)))
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(" ")
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,18 +28,20 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'drf_yasg',
+    'django_filters',
+
+    'corsheaders',
 
     'src.oauth',
     'src.audio_library',
 
-    'corsheaders',
-
 ]
 
+
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -118,6 +119,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -130,16 +132,11 @@ ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 
 
-GOOGLE_CLIENT_ID = '675947327797-086oknehlj3qqnp9i0ip9q4kp5v5duc7.apps.googleusercontent.com'
-GOOGLE_CLIENT_SECRET = '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'
+GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
+GOOGLE_SECRET_KEY = os.environ.get('GOOGLE_SECRET_KEY')
 
-SPOTIFY_CLIENT_ID = '12a8f0fb8fca44dca0d2a07dc6cf266d'
-SPOTIFY_SECRET = 'd3cc98aec7e04766a488a8412b9469ad'
-
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:8000",  # для localhost с IP
-    "http://localhost:8000",  # для localhost с именем хоста
-]
+SPOTIFY_CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
+SPOTIFY_SECRET_KEY = os.environ.get('SPOTIFY_SECRET_KEY')
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -148,7 +145,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('src.oauth.services.auth_backend.AuthBackend',),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny'
-    ]
+    ],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 
@@ -161,3 +159,11 @@ SWAGGER_SETTINGS = {
         }
     }
 }
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "http://127.0.0.1",
+    "http://localhost:3000",
+]
