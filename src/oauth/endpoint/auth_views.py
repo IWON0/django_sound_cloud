@@ -27,7 +27,6 @@ def google_auth(request):
             "Access-Control-Allow-Headers": "Content-Type",
         })
 
-    # Ваш текущий код для обработки POST-запросов:
     google_data = serializer.GoogleAuth(data=request.data)
     if google_data.is_valid():
         token = google.check_google_auth(google_data.data)

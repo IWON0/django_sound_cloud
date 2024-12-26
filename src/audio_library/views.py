@@ -112,7 +112,9 @@ class AuthorTrackListView(generics.ListAPIView):
     filterset_fields = ['title', 'album__name', 'genre__name']
 
     def get_queryset(self):
-        return models.Track.objects.filter(user__id=self.kwargs.get('pk'), album__private=False, private=False)
+        return models.Track.objects.filter(
+            user__id=self.kwargs.get('pk'), album__private=False, private=False
+        )
 
 
 class CommentAuthorView(viewsets.ModelViewSet):
