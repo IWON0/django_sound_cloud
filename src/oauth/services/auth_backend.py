@@ -47,7 +47,6 @@ class AuthBackend(authentication.BaseAuthentication):
         except jwt.InvalidTokenError:
             raise exceptions.AuthenticationFailed("Invalid token.")
 
-        # Проверяем, что пользователь существует
         try:
             user = AuthUser.objects.get(id=payload['user_id'])
         except AuthUser.DoesNotExist:

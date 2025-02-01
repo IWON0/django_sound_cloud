@@ -31,7 +31,7 @@ def get_spotify_jwt(code: str) -> Optional[str]:
 
 def get_spotify_user(token: str) -> str:
     url_get_user = 'https://api.spotify.com/v1/me'
-    headers = {'Authorization': f'Bearer {token}'}
+    headers = {'Authorization': f'Token {token}'}
     res = requests.get(url_get_user, headers=headers)
     r = res.json()
     return r.get('email')
