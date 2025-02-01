@@ -9,7 +9,7 @@ from src.oauth.models import AuthUser
 
 
 class AuthBackend(authentication.BaseAuthentication):
-    authentication_header_prefix = 'Token'
+    authentication_header_prefix = 'Token'  # Мы ожидаем "Token" в заголовке
 
     def authenticate(self, request) -> Optional[tuple]:
         # Получаем заголовок Authorization
@@ -27,7 +27,7 @@ class AuthBackend(authentication.BaseAuthentication):
 
         # Проверяем, что заголовок состоит из 2 частей: "Token <token>"
         if len(auth_header_parts) != 2 or auth_header_parts[0].lower() != self.authentication_header_prefix.lower().encode():
-            return None
+            raise exceptions.AuthenticationFailed("Authorization header must be 'Token <token>'")
 
         # Декодируем токен
         try:
@@ -47,7 +47,6 @@ class AuthBackend(authentication.BaseAuthentication):
         except jwt.InvalidTokenError:
             raise exceptions.AuthenticationFailed("Invalid token.")
 
-        # Проверяем, что пользователь существует
         try:
             user = AuthUser.objects.get(id=payload['user_id'])
         except AuthUser.DoesNotExist:

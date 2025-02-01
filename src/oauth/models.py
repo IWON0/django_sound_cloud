@@ -7,6 +7,7 @@ from src.base.services import get_path_upload_avatar, validate_size_image
 class AuthUser(models.Model):
     """Модель пользователя на платформе"""
     email = models.EmailField(max_length=150, unique=True)
+    is_email_verified = models.BooleanField(default=False)
     join_date = models.DateField(auto_now_add=True)
     country = models.CharField(max_length=30, blank=True, null=True)
     city = models.CharField(max_length=30, blank=True, null=True)
